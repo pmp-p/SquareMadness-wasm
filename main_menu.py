@@ -30,12 +30,36 @@ player = Player(5, 10, 700, 80)
 collectables = [Collectable() for _ in range(500)]
 
 
+def sprite_test():
+    triangle = pg.image.load('assets/triangle-purple.png').convert_alpha()
+    triangle_rect = triangle.get_rect()
+    circle = pg.image.load('assets/circle-green.png').convert_alpha()
+    circle_rect = circle.get_rect(center=(400, 50))
+    triangle_rect = triangle.get_rect(center=(600, 50))
+    while True:
+        screen.blit(circle, circle_rect)
+        screen.blit(triangle, triangle_rect)
+
+
 def get_font(size):  # supportive function
     return pg.font.Font("assets/font.ttf", size)
 
 
+def adding_sprites():  # for loading the sprites
+    triangle = pg.image.load('assets/triangle-purple.png').convert_alpha()
+    triangle_rect = triangle.get_rect()
+    circle = pg.image.load('assets/circle-green.png').convert_alpha()
+    circle_rect = circle.get_rect(center=(400, 50))
+    triangle_rect = triangle.get_rect(center=(600, 50))
+
+    screen.blit(circle, circle_rect)
+    screen.blit(triangle, triangle_rect)
+
+
 def play():  # what happens after play button gets clicked
+
     while True:
+
         screen_w, screen_h = pygame.display.get_window_size()
 
         for event in pg.event.get():
@@ -47,6 +71,7 @@ def play():  # what happens after play button gets clicked
 
         player.move(items + collectables, screen_w, screen_h)
         screen.fill("black")
+        # adding_sprites()
         player.draw(screen, items)
 
         for item in items:
@@ -159,20 +184,18 @@ def options():  # what happens after options button gets clicked
 
 def main_menu():  # Main screen upon opening the game, showing the main menu
     while True:
-        sw, sh = pygame.display.get_window_size()
-        background_ = pygame.transform.scale(background,(sw,sh))
-        screen.blit(background_, (0, 0))
+        screen.blit(background, (0, 0))
 
         menu_mouse_pos = pg.mouse.get_pos()
 
         menu_text = get_font(100).render("MAIN MENU", True, "#b68f40")
-        menu_rect = menu_text.get_rect(center=(sw // 2, int(sh*0.138888889)))
+        menu_rect = menu_text.get_rect(center=(640, 100))
 
-        play_button = Button(image=pg.image.load("assets/Play Rect.png"), pos=(sw // 2, int(sh * 0.347222222)),
+        play_button = Button(image=pg.image.load("assets/Play Rect.png"), pos=(640, 250),
                              text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="gray")
-        options_button = Button(image=pg.image.load("assets/Options Rect.png"), pos=(sw // 2, int(sh * 0.555555556)),
+        options_button = Button(image=pg.image.load("assets/Options Rect.png"), pos=(640, 400),
                                 text_input="OPTIONS", font=get_font(75), base_color="#d7fcd4", hovering_color="gray")
-        quit_button = Button(image=pg.image.load("assets/Quit Rect.png"), pos=(sw // 2, int(sh * 0.763888889)),
+        quit_button = Button(image=pg.image.load("assets/Quit Rect.png"), pos=(640, 550),
                              text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="gray")
         buttons = [play_button, options_button, quit_button]
         screen.blit(menu_text, menu_rect)
