@@ -2,41 +2,41 @@ import pygame as pg
 from sys import exit
 from button import Button
 
+
 pg.init()
-
-screen = pg.display.set_mode((1280, 720))
+screen = pg.display.set_mode((1280, 720), pg.RESIZABLE)
 pg.display.set_caption("Menu")
+Clock = pg.time.Clock()
+background = pg.image.load("assets/Background.png")
 
-BG = pg.image.load("assets/Background.png")
 
-
-def get_font(size):  # Returns Press-Start-2P in the desired size
+def get_font(size):
     return pg.font.Font("assets/font.ttf", size)
 
 
 def play():
     while True:
-        play_mouse_pos = pg.mouse.get_pos()
+        # play_mouse_pos = pg.mouse.get_pos()
 
         screen.fill("black")
 
-        play_text = get_font(45).render("This is the PLAY screen.", True, "gray")
-        play_rect = play_text.get_rect(center=(640, 260))
-        screen.blit(play_text, play_rect)
+        # play_text = get_font(45).render("This is the PLAY screen.", True, "gray")
+        # play_rect = play_text.get_rect(center=(640, 260))
+        # screen.blit(play_text, play_rect)
 
-        play_back = Button(image=None, pos=(640, 460),
-                           text_input="BACK", font=get_font(75), base_color="gray", hovering_color="Green")
-
-        play_back.changeColor(play_mouse_pos)
-        play_back.update(screen)
+        # play_back = Button(image=None, pos=(640, 460),
+        #                    text_input="BACK", font=get_font(75), base_color="gray", hovering_color="Green")
+        #
+        # play_back.changeColor(play_mouse_pos)
+        # play_back.update(screen)
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
-                sys.exit()
-            if event.type == pg.MOUSEBUTTONDOWN:
-                if play_back.checkForInput(play_mouse_pos):
-                    main_menu()
+                exit()
+            # if event.type == pg.MOUSEBUTTONDOWN:
+            #     if play_back.checkForInput(play_mouse_pos):
+            #         main_menu()
 
         pg.display.update()
 
@@ -60,7 +60,7 @@ def options():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
-                sys.exit()
+                exit()
             if event.type == pg.MOUSEBUTTONDOWN:
                 if options_back.checkForInput(options_mouse_pos):
                     main_menu()
@@ -70,7 +70,7 @@ def options():
 
 def main_menu():
     while True:
-        screen.blit(BG, (0, 0))
+        screen.blit(background, (0, 0))
 
         menu_mouse_pos = pg.mouse.get_pos()
 
@@ -93,7 +93,8 @@ def main_menu():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
-                sys.exit()
+                exit()
+
             if event.type == pg.MOUSEBUTTONDOWN:
                 if play_button.checkForInput(menu_mouse_pos):
                     play()
@@ -101,9 +102,10 @@ def main_menu():
                     options()
                 if quit_button.checkForInput(menu_mouse_pos):
                     pg.quit()
-                    sys.exit()
+                    exit()
 
         pg.display.update()
+        Clock.tick(60)
 
 
 if __name__ == '__main__':
