@@ -1,6 +1,4 @@
 import random
-
-import pygame
 import pygame as pg
 from sys import exit
 from button import Button
@@ -28,17 +26,6 @@ background = pg.image.load("assets/Background.png")
 player = Player(5, 10, 700, 80)
 
 collectables = [Collectable() for _ in range(500)]
-
-
-def sprite_test():
-    triangle = pg.image.load('assets/triangle-purple.png').convert_alpha()
-    triangle_rect = triangle.get_rect()
-    circle = pg.image.load('assets/circle-green.png').convert_alpha()
-    circle_rect = circle.get_rect(center=(400, 50))
-    triangle_rect = triangle.get_rect(center=(600, 50))
-    while True:
-        screen.blit(circle, circle_rect)
-        screen.blit(triangle, triangle_rect)
 
 
 def get_font(size):  # supportive function
