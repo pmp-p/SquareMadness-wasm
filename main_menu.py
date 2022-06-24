@@ -3,58 +3,44 @@ from sys import exit
 from button import Button
 from player import *
 
-
 pg.init()
 screen = pg.display.set_mode((1280, 720), pg.RESIZABLE)
 pg.display.set_caption("Menu")
 Clock = pg.time.Clock()
 background = pg.image.load("assets/Background.png")
 
-player = Player(4,10,700,80)
+player = Player(4, 10, 700, 80)
 
-def get_font(size):
+
+def get_font(size):  # supportive function
     return pg.font.Font("assets/font.ttf", size)
 
 
-def play():
+def play():  # what happens after play button gets clicked
     while True:
-        screen_w,screen_h = pygame.display.get_window_size()
-        # play_mouse_pos = pg.mouse.get_pos()
+        screen_w, screen_h = pygame.display.get_window_size()
 
         screen.fill("black")
-
-        # play_text = get_font(45).render("This is the PLAY screen.", True, "gray")
-        # play_rect = play_text.get_rect(center=(640, 260))
-        # screen.blit(play_text, play_rect)
-
-        # play_back = Button(image=None, pos=(640, 460),
-        #                    text_input="BACK", font=get_font(75), base_color="gray", hovering_color="Green")
-        #
-        # play_back.changeColor(play_mouse_pos)
-        # play_back.update(screen)
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
                 exit()
-            # if event.type == pg.MOUSEBUTTONDOWN:
-            #     if play_back.checkForInput(play_mouse_pos):
-            #         main_menu()
 
-        player.move(items,screen_w,screen_h)
+        player.move(items, screen_w, screen_h)
         screen.fill("white")
         player.draw(screen, items)
         pg.display.update()
 
 
-def options_video():
+def options_video():  # what happens after options -> video button gets clicked
     while True:
         options_video_mouse_pos = pg.mouse.get_pos()
         options_video_text = get_font(45).render("This is the VIDEO screen.", True, "gray")
         options_video_rect = options_video_text.get_rect(center=(640, 260))
 
         options_video_back = Button(image=None, pos=(640, 460),
-                           text_input="BACK", font=get_font(75), base_color="gray", hovering_color="Green")
+                                    text_input="BACK", font=get_font(75), base_color="gray", hovering_color="Green")
 
         screen.fill("black")
         options_video_back.changeColor(options_video_mouse_pos)
@@ -64,13 +50,13 @@ def options_video():
             if event.type == pg.QUIT:
                 pg.quit()
                 exit()
-            if event.type == pg.MOUSEBUTTONDOWN:
+            if event.type == pg.MOUSEBUTTONDOWN:  # what happens if a certain button gets clicked
                 if options_video_back.checkForInput(options_video_mouse_pos):
                     options()
         pg.display.update()
 
 
-def options_audio():
+def options_audio():  # what happens after options -> audio button gets clicked
     while True:
         options_audio_mouse_pos = pg.mouse.get_pos()
         options_audio_text = get_font(45).render("This is the PLAY screen.", True, "gray")
@@ -90,15 +76,13 @@ def options_audio():
             if event.type == pg.QUIT:
                 pg.quit()
                 exit()
-            if event.type == pg.MOUSEBUTTONDOWN:
+            if event.type == pg.MOUSEBUTTONDOWN:  # what happens if a certain button gets clicked
                 if options_audio_back.checkForInput(options_audio_mouse_pos):
                     options()
         pg.display.update()
 
 
-def options():
-
-
+def options():  # what happens after options button gets clicked
     while True:
         options_mouse_pos = pg.mouse.get_pos()
         options_mouse_pos = pg.mouse.get_pos()
@@ -107,14 +91,12 @@ def options():
         options_text = get_font(45).render("This is the OPTIONS screen.", True, "gray")
         options_rect = options_text.get_rect(center=(640, 160))
 
-
         screen.blit(options_text, options_rect)
 
-
         options_audio_btn = Button(image=None, pos=(640, 260),
-                              text_input="AUDIO", font=get_font(75), base_color="gray", hovering_color="Green")
+                                   text_input="AUDIO", font=get_font(75), base_color="gray", hovering_color="Green")
         options_video_btn = Button(image=None, pos=(640, 360),
-                              text_input="VIDEO", font=get_font(75), base_color="gray", hovering_color="Green")
+                                   text_input="VIDEO", font=get_font(75), base_color="gray", hovering_color="Green")
         options_back = Button(image=None, pos=(640, 460),
                               text_input="BACK", font=get_font(75), base_color="gray", hovering_color="Green")
         options_buttons = [options_audio_btn, options_video_btn, options_back]
@@ -131,7 +113,7 @@ def options():
             if event.type == pg.QUIT:
                 pg.quit()
                 exit()
-            if event.type == pg.MOUSEBUTTONDOWN:
+            if event.type == pg.MOUSEBUTTONDOWN:  # what happens if a certain button gets clicked
 
                 if options_audio_btn.checkForInput(options_mouse_pos):
                     options_audio()
@@ -140,11 +122,10 @@ def options():
                 if options_back.checkForInput(options_mouse_pos):
                     main_menu()
 
-
         pg.display.update()
 
 
-def main_menu():
+def main_menu():  # Main screen upon opening the game, showing the main menu
     while True:
         screen.blit(background, (0, 0))
 
@@ -171,7 +152,7 @@ def main_menu():
                 pg.quit()
                 exit()
 
-            if event.type == pg.MOUSEBUTTONDOWN:
+            if event.type == pg.MOUSEBUTTONDOWN:  # what happens if a certain button gets clicked
                 if play_button.checkForInput(menu_mouse_pos):
                     play()
                 if options_button.checkForInput(menu_mouse_pos):
