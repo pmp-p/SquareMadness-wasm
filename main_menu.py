@@ -1,7 +1,23 @@
+import random
+
+import pygame
 import pygame as pg
 from sys import exit
 from button import Button
 from player import *
+
+
+class Collectable:
+    def __init__(self):
+        self.pos = Vector2(random.randint(-1280 * 2, 1280 * 2), random.randint(-720 * 2, 720 * 2))
+
+    def update_pos(self, dir):
+        self.pos.x += dir[0]
+        self.pos.y += dir[1]
+
+    def draw(self, win):
+        pygame.draw.circle(win, (0, 255, 0), self.pos, 20)
+
 
 pg.init()
 screen = pg.display.set_mode((1280, 720), pg.RESIZABLE)
@@ -9,7 +25,9 @@ pg.display.set_caption("Menu")
 Clock = pg.time.Clock()
 background = pg.image.load("assets/Background.png")
 
-player = Player(4, 10, 700, 80)
+player = Player(5, 10, 700, 80)
+
+collectables = [Collectable() for _ in range(500)]
 
 
 def get_font(size):  # supportive function
@@ -20,17 +38,32 @@ def play():  # what happens after play button gets clicked
     while True:
         screen_w, screen_h = pygame.display.get_window_size()
 
-        screen.fill("black")
-
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
                 exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                items.append(Item(*pygame.mouse.get_pos(), 15, 15, (255, 0, 255)))
 
-        player.move(items, screen_w, screen_h)
-        screen.fill("white")
+        player.move(items + collectables, screen_w, screen_h)
+        screen.fill("black")
         player.draw(screen, items)
+
+        for item in items:
+            item.update(player)
+        for collectable in collectables:
+            collectable.draw(screen)
+
+        collisions = player.rect.collidelistall([pygame.Rect(c.pos.x,c.pos.y,20,20) for c in collectables])
+        player.score += len(collisions)
+        for collision in collisions:
+            collectables.pop(collision)
+        # collectables = collectables_copy.copy()
+
+        t = get_font(35).render(f"Score:{player.score}",True,(255,255,255))
+        screen.blit(t,(10,10))
         pg.display.update()
+        Clock.tick(60)
 
 
 def options_video():  # what happens after options -> video button gets clicked
@@ -84,7 +117,6 @@ def options_audio():  # what happens after options -> audio button gets clicked
 
 def options():  # what happens after options button gets clicked
     while True:
-        options_mouse_pos = pg.mouse.get_pos()
         options_mouse_pos = pg.mouse.get_pos()
         screen.fill("black")
 
