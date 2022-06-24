@@ -1,6 +1,7 @@
 import pygame as pg
 from sys import exit
 from button import Button
+from player import *
 
 
 pg.init()
@@ -9,6 +10,7 @@ pg.display.set_caption("Menu")
 Clock = pg.time.Clock()
 background = pg.image.load("assets/Background.png")
 
+player = Player(4,10,700,80)
 
 def get_font(size):
     return pg.font.Font("assets/font.ttf", size)
@@ -16,6 +18,7 @@ def get_font(size):
 
 def play():
     while True:
+        screen_w,screen_h = pygame.display.get_window_size()
         # play_mouse_pos = pg.mouse.get_pos()
 
         screen.fill("black")
@@ -38,6 +41,9 @@ def play():
             #     if play_back.checkForInput(play_mouse_pos):
             #         main_menu()
 
+        player.move(items,screen_w,screen_h)
+        screen.fill("white")
+        player.draw(screen, items)
         pg.display.update()
 
 
