@@ -54,14 +54,14 @@ def play():  # what happens after play button gets clicked
         for collectable in collectables:
             collectable.draw(screen)
 
-        collisions = player.rect.collidelistall([pygame.Rect(c.pos.x,c.pos.y,20,20) for c in collectables])
+        collisions = player.rect.collidelistall([pygame.Rect(c.pos.x, c.pos.y, 20, 20) for c in collectables])
         player.score += len(collisions)
         for collision in collisions:
             collectables.pop(collision)
         # collectables = collectables_copy.copy()
 
-        t = get_font(35).render(f"Score:{player.score}",True,(255,255,255))
-        screen.blit(t,(10,10))
+        t = get_font(35).render(f"Score:{player.score}", True, (255, 255, 255))
+        screen.blit(t, (10, 10))
         pg.display.update()
         Clock.tick(60)
 
@@ -159,18 +159,20 @@ def options():  # what happens after options button gets clicked
 
 def main_menu():  # Main screen upon opening the game, showing the main menu
     while True:
-        screen.blit(background, (0, 0))
+        sw, sh = pygame.display.get_window_size()
+        background_ = pygame.transform.scale(background,(sw,sh))
+        screen.blit(background_, (0, 0))
 
         menu_mouse_pos = pg.mouse.get_pos()
 
         menu_text = get_font(100).render("MAIN MENU", True, "#b68f40")
-        menu_rect = menu_text.get_rect(center=(640, 100))
+        menu_rect = menu_text.get_rect(center=(sw // 2, int(sh*0.138888889)))
 
-        play_button = Button(image=pg.image.load("assets/Play Rect.png"), pos=(640, 250),
+        play_button = Button(image=pg.image.load("assets/Play Rect.png"), pos=(sw // 2, int(sh * 0.347222222)),
                              text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="gray")
-        options_button = Button(image=pg.image.load("assets/Options Rect.png"), pos=(640, 400),
+        options_button = Button(image=pg.image.load("assets/Options Rect.png"), pos=(sw // 2, int(sh * 0.555555556)),
                                 text_input="OPTIONS", font=get_font(75), base_color="#d7fcd4", hovering_color="gray")
-        quit_button = Button(image=pg.image.load("assets/Quit Rect.png"), pos=(640, 550),
+        quit_button = Button(image=pg.image.load("assets/Quit Rect.png"), pos=(sw // 2, int(sh * 0.763888889)),
                              text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="gray")
         buttons = [play_button, options_button, quit_button]
         screen.blit(menu_text, menu_rect)
