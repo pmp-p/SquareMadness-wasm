@@ -41,29 +41,99 @@ def play():
         pg.display.update()
 
 
-def options():
+def options_video():
     while True:
-        options_mouse_pos = pg.mouse.get_pos()
+        options_video_mouse_pos = pg.mouse.get_pos()
+        options_video_text = get_font(45).render("This is the VIDEO screen.", True, "gray")
+        options_video_rect = options_video_text.get_rect(center=(640, 260))
+
+        options_video_back = Button(image=None, pos=(640, 460),
+                           text_input="BACK", font=get_font(75), base_color="gray", hovering_color="Green")
 
         screen.fill("black")
-
-        options_text = get_font(45).render("This is the OPTIONS screen.", True, "gray")
-        options_rect = options_text.get_rect(center=(640, 260))
-        screen.blit(options_text, options_rect)
-
-        options_back = Button(image=None, pos=(640, 460),
-                              text_input="BACK", font=get_font(75), base_color="gray", hovering_color="Green")
-
-        options_back.changeColor(options_mouse_pos)
-        options_back.update(screen)
-
+        options_video_back.changeColor(options_video_mouse_pos)
+        options_video_back.update(screen)
+        screen.blit(options_video_text, options_video_rect)
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
                 exit()
             if event.type == pg.MOUSEBUTTONDOWN:
+                if options_video_back.checkForInput(options_video_mouse_pos):
+                    options()
+        pg.display.update()
+
+
+def options_audio():
+    while True:
+        options_audio_mouse_pos = pg.mouse.get_pos()
+        options_audio_text = get_font(45).render("This is the PLAY screen.", True, "gray")
+        options_audio_rect = options_audio_text.get_rect(center=(640, 260))
+        screen.blit(options_audio_text, options_audio_rect)
+
+        options_audio_back = Button(image=None, pos=(640, 460),
+                                    text_input="BACK", font=get_font(75), base_color="gray", hovering_color="Green")
+
+        screen.fill("black")
+        options_audio_back.changeColor(options_audio_mouse_pos)
+        options_audio_back.update(screen)
+        options_text = get_font(45).render("This is the AUDIO screen.", True, "gray")
+        options_rect = options_text.get_rect(center=(640, 260))
+        screen.blit(options_text, options_rect)
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                exit()
+            if event.type == pg.MOUSEBUTTONDOWN:
+                if options_audio_back.checkForInput(options_audio_mouse_pos):
+                    options()
+        pg.display.update()
+
+
+def options():
+
+
+    while True:
+        options_mouse_pos = pg.mouse.get_pos()
+        options_mouse_pos = pg.mouse.get_pos()
+        screen.fill("black")
+
+        options_text = get_font(45).render("This is the OPTIONS screen.", True, "gray")
+        options_rect = options_text.get_rect(center=(640, 160))
+
+
+        screen.blit(options_text, options_rect)
+
+
+        options_audio_btn = Button(image=None, pos=(640, 260),
+                              text_input="AUDIO", font=get_font(75), base_color="gray", hovering_color="Green")
+        options_video_btn = Button(image=None, pos=(640, 360),
+                              text_input="VIDEO", font=get_font(75), base_color="gray", hovering_color="Green")
+        options_back = Button(image=None, pos=(640, 460),
+                              text_input="BACK", font=get_font(75), base_color="gray", hovering_color="Green")
+        options_buttons = [options_audio_btn, options_video_btn, options_back]
+        options_back.changeColor(options_mouse_pos)
+        options_back.update(screen)
+        options_audio_btn.changeColor(options_mouse_pos)
+        options_audio_btn.update(screen)
+        options_video_btn.changeColor(options_mouse_pos)
+        options_video_btn.update(screen)
+        for button in options_buttons:
+            button.changeColor(options_mouse_pos)
+            button.update(screen)
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                exit()
+            if event.type == pg.MOUSEBUTTONDOWN:
+
+                if options_audio_btn.checkForInput(options_mouse_pos):
+                    options_audio()
+                if options_video_btn.checkForInput(options_mouse_pos):
+                    options_video()
                 if options_back.checkForInput(options_mouse_pos):
                     main_menu()
+
 
         pg.display.update()
 
@@ -83,10 +153,10 @@ def main_menu():
                                 text_input="OPTIONS", font=get_font(75), base_color="#d7fcd4", hovering_color="gray")
         quit_button = Button(image=pg.image.load("assets/Quit Rect.png"), pos=(640, 550),
                              text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="gray")
-
+        buttons = [play_button, options_button, quit_button]
         screen.blit(menu_text, menu_rect)
 
-        for button in [play_button, options_button, quit_button]:
+        for button in buttons:
             button.changeColor(menu_mouse_pos)
             button.update(screen)
 
