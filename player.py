@@ -4,7 +4,7 @@ import pygame
 from pygame.math import Vector2
 
 
-class Item:
+class Enemy:
     SPEED = 2
 
     def __init__(self, x, y, w, h, color):
@@ -34,7 +34,7 @@ class Item:
         # print(dx, dy, self.rect.center)
 
 
-test_obstacle = Item(50, 50, 30, 30, (255, 0, 0))
+test_obstacle = Enemy(50, 50, 30, 30, (255, 0, 0))
 items = [test_obstacle]
 
 stats = {

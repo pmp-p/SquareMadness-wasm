@@ -27,7 +27,7 @@ background = pg.image.load("assets/Backgrounds/Background.png")
 
 player = Player(5, 10, 700, 80)
 
-collectables = [Collectable() for _ in range(50)]
+collectables = [Collectable() for _ in range(150)]
 
 
 def get_font(size):  # supportive function
@@ -59,7 +59,7 @@ def play():  # what happens after play button gets clicked
                 if event.button == 1:
                     player.shoot()
                 else:
-                    items.append(Item(*pygame.mouse.get_pos(), 30, 30, (255, 0, 255)))
+                    items.append(Enemy(*pygame.mouse.get_pos(), 30, 30, (255, 0, 255)))
 
         player.move(items + collectables, screen_w, screen_h)
         screen.fill("black")
@@ -88,9 +88,6 @@ def play():  # what happens after play button gets clicked
         screen.blit(t, (10, 10))
         pg.display.update()
         Clock.tick(60)
-
-
-
 
 
 def options_video():  # what happens after options -> video button gets clicked
