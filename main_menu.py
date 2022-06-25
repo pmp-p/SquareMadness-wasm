@@ -84,10 +84,13 @@ def play():  # what happens after play button gets clicked
             collectables.pop(collision)
         # collectables = collectables_copy.copy()
 
-        t = get_font(35).render(f"Score:{player.score}", True, (255, 255, 255))
+        t = get_font(34).render(f"Score:{player.score}", True, (255, 255, 255))
         screen.blit(t, (10, 10))
         pg.display.update()
         Clock.tick(60)
+
+
+
 
 
 def options_video():  # what happens after options -> video button gets clicked
