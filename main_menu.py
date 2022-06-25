@@ -170,10 +170,13 @@ def main_menu():  # Main screen upon opening the game, showing the main menu
 
         play_button = Button(image=pg.image.load("assets/Play Rect.png"), pos=(sw // 2, int(sh * 0.347222222)),
                              text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="gray")
+
         options_button = Button(image=pg.image.load("assets/Options Rect.png"), pos=(sw // 2, int(sh * 0.555555556)),
                                 text_input="OPTIONS", font=get_font(75), base_color="#d7fcd4", hovering_color="gray")
+
         quit_button = Button(image=pg.image.load("assets/Quit Rect.png"), pos=(sw // 2, int(sh * 0.763888889)),
                              text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="gray")
+
         buttons = [play_button, options_button, quit_button]
         screen.blit(menu_text, menu_rect)
 
