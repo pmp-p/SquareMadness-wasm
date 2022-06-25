@@ -23,7 +23,7 @@ pg.init()
 screen = pg.display.set_mode((1280, 720), pg.RESIZABLE)
 pg.display.set_caption("Menu")
 Clock = pg.time.Clock()
-background = pg.image.load("assets/Background.png")
+background = pg.image.load("assets/Backgrounds/Background.png")
 
 player = Player(5, 10, 700, 80)
 
@@ -31,13 +31,13 @@ collectables = [Collectable() for _ in range(500)]
 
 
 def get_font(size):  # supportive function
-    return pg.font.Font("assets/font.ttf", size)
+    return pg.font.Font("assets/Fonts/font.ttf", size)
 
 
 def adding_sprites():  # for loading the sprites
-    triangle = pg.image.load('assets/triangle-purple.png').convert_alpha()
+    triangle = pg.image.load('assets/Sprites/triangle-purple.png').convert_alpha()
     triangle_rect = triangle.get_rect()
-    circle = pg.image.load('assets/circle-green.png').convert_alpha()
+    circle = pg.image.load('assets/Sprites/circle-green.png').convert_alpha()
     circle_rect = circle.get_rect(center=(400, 50))
     triangle_rect = triangle.get_rect(center=(600, 50))
 
@@ -182,13 +182,13 @@ def main_menu():  # Main screen upon opening the game, showing the main menu
         menu_text = get_font(100).render("MAIN MENU", True, "#b68f40")
         menu_rect = menu_text.get_rect(center=(sw // 2, int(sh*0.138888889)))
 
-        play_button = Button(image=pg.image.load("assets/Play Rect.png"), pos=(sw // 2, int(sh * 0.347222222)),
+        play_button = Button(image=pg.image.load("assets/Buttons/Play Rect.png"), pos=(sw // 2, int(sh * 0.347222222)),
                              text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="gray")
 
-        options_button = Button(image=pg.image.load("assets/Options Rect.png"), pos=(sw // 2, int(sh * 0.555555556)),
+        options_button = Button(image=pg.image.load("assets/Buttons/Options Rect.png"), pos=(sw // 2, int(sh * 0.555555556)),
                                 text_input="OPTIONS", font=get_font(75), base_color="#d7fcd4", hovering_color="gray")
 
-        quit_button = Button(image=pg.image.load("assets/Quit Rect.png"), pos=(sw // 2, int(sh * 0.763888889)),
+        quit_button = Button(image=pg.image.load("assets/Buttons/Quit Rect.png"), pos=(sw // 2, int(sh * 0.763888889)),
                              text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="gray")
 
         buttons = [play_button, options_button, quit_button]
