@@ -34,8 +34,21 @@ def get_font(size):  # supportive function
     return pg.font.Font("assets/font.ttf", size)
 
 
+def adding_sprites():  # for loading the sprites
+    triangle = pg.image.load('assets/triangle-purple.png').convert_alpha()
+    triangle_rect = triangle.get_rect()
+    circle = pg.image.load('assets/circle-green.png').convert_alpha()
+    circle_rect = circle.get_rect(center=(400, 50))
+    triangle_rect = triangle.get_rect(center=(600, 50))
+
+    screen.blit(circle, circle_rect)
+    screen.blit(triangle, triangle_rect)
+
+
 def play():  # what happens after play button gets clicked
+
     while True:
+
         screen_w, screen_h = pygame.display.get_window_size()
 
         for event in pg.event.get():
@@ -47,6 +60,7 @@ def play():  # what happens after play button gets clicked
 
         player.move(items + collectables, screen_w, screen_h)
         screen.fill("black")
+        # adding_sprites()
         player.draw(screen, items)
 
         for item in items:
