@@ -55,7 +55,7 @@ class Player:
     def __init__(self, speed, health, x, y):
         self.speed = speed
         self.health = health
-        self.score = 0
+        self.score = 1
         self.rect = pygame.rect.Rect(x, y, 50, 50)
 
         self.state = "triangle"
@@ -69,21 +69,21 @@ class Player:
         self.img = pygame.transform.scale(self.img, self.rect.size)
 
     def draw(self, screen, items, w, h):
-        # placing = 360 / (self.score+1)
-        # prev = None
-        # for i in range(self.score+1):
-        #     ang = i * placing
-        #     ang = math.radians(ang)
-        #     rad = self.rect.w
-        #     x = math.cos(ang) * rad
-        #     y = math.sin(ang) * rad
-        #     # print(x+500, y+500)
-        #     if prev is not None:
-        #         # pygame.draw.line(screen, (255, 255, 255), (x + self.rect.centerx, y + self.rect.centery),                                 (prev[0] + self.rect.centerx, prev[1] + self.rect.centery), 2)
-        #
-        #         pygame.draw.line(screen, (255, 255, 255), (x + self.rect.centerx, y + self.rect.centery),
-        #                          (prev[0] + self.rect.centerx, prev[1] + self.rect.centery), 2)
-        #     prev = x, y
+        placing = 360 / self.score
+        prev = None
+        for i in range(self.score + 1):
+            ang = i * placing
+            ang = math.radians(ang)
+            rad = self.rect.w
+            x = math.cos(ang) * rad
+            y = math.sin(ang) * rad
+            # print(x+500, y+500)
+            if prev is not None:
+                # pygame.draw.line(screen, (255, 255, 255), (x + self.rect.centerx, y + self.rect.centery),                                 (prev[0] + self.rect.centerx, prev[1] + self.rect.centery), 2)
+
+                pygame.draw.line(screen, (255, 255, 255), (x + self.rect.centerx, y + self.rect.centery),
+                                 (prev[0] + self.rect.centerx, prev[1] + self.rect.centery), 2)
+            prev = x, y
 
         # pygame.draw.rect(screen, (255, 255, 255), self.rect)
         angle = math.atan2(self.rect.y - pygame.mouse.get_pos()[1], self.rect.x - pygame.mouse.get_pos()[0])
@@ -133,11 +133,22 @@ class Player:
                     item.update_pos((-self.speed, 0))
 
     def shoot(self):
-        tmp = self.tmp_bullet.copy()
-        tmp["pos"] = Vector2(*self.rect.center)
-        angle = math.atan2(pygame.mouse.get_pos()[1] - self.rect.y, pygame.mouse.get_pos()[0] - self.rect.x)
-        tmp["vel"] = tmp["vel"].copy()
-        tmp["vel"].x = math.cos(angle)
-        tmp["vel"].y = math.sin(angle)
+        placing = 360 / self.score
 
-        self.bullets.append(tmp.copy())
+        for i in range(self.score + 1):
+            ang = i * placing
+            ang = math.radians(ang)
+            rad = self.rect.w
+            x = math.cos(ang) * rad
+            y = math.sin(ang) * rad
+
+            tmp = self.tmp_bullet.copy()
+            tmp["pos"] = Vector2(self.rect.centerx + x, self.rect.centery + y)
+
+            angle = math.atan2(y, x)
+
+            tmp["vel"] = tmp["vel"].copy()
+            tmp["vel"].x = math.cos(angle)
+            tmp["vel"].y = math.sin(angle)
+
+            self.bullets.append(tmp.copy())
