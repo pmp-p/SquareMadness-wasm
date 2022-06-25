@@ -21,7 +21,7 @@ class Collectable:
 
 pg.init()
 screen = pg.display.set_mode((1280, 720), pg.RESIZABLE)
-pg.display.set_caption("Menu")
+pg.display.set_caption("Menu ")
 Clock = pg.time.Clock()
 background = pg.image.load("assets/Backgrounds/Background.png")
 
