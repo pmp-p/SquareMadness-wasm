@@ -29,6 +29,12 @@ player = Player(5, 10, 700, 80)
 
 collectables = [Collectable() for _ in range(150)]
 
+wave_timer = pygame.USEREVENT + 1
+pygame.time.set_timer(wave_timer, 5000)
+
+wave_enemy_count = 30
+wave_count = 0
+
 
 def get_font(size):  # supportive function
     return pg.font.Font("assets/Fonts/font.ttf", size)
@@ -46,14 +52,32 @@ def adding_sprites():  # for loading the sprites
 
 
 def play():  # what happens after play button gets clicked
+    screen_w, screen_h = pygame.display.get_window_size()
     while True:
-
-        screen_w, screen_h = pygame.display.get_window_size()
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
                 exit()
+            if event.type == wave_timer:
+                for enemy_i in range(wave_enemy_count):
+                    i = random.random()
+                    if i < .25:
+                        x = random.randint(-screen_w, 0)
+                        y = random.randint(0, screen_h)
+                    elif i < .50:
+                        x = random.randint(screen_w, screen_w * 2)
+                        y = random.randint(0, screen_h)
+                    elif i < .75:
+                        x = random.randint(0, screen_w)
+                        y = random.randint(-screen_h, 0)
+
+                    elif i < 1:
+                        x = random.randint(0, screen_w)
+                        y = random.randint(screen_h, screen_h * 2)
+
+                    items.append(Enemy(x, y, 30, 30, (255, 0, 0)))
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 print(event.button)
                 if event.button == 1:
@@ -63,7 +87,7 @@ def play():  # what happens after play button gets clicked
 
         player.move(items + collectables, screen_w, screen_h)
         screen.fill("black")
-        # adding_sprites()
+
         player.draw(screen, items, screen_w, screen_h)
 
         for item in items:
@@ -73,10 +97,15 @@ def play():  # what happens after play button gets clicked
                     if item in items:
                         items.remove(item)
 
+                    if b in player.bullets:
+                        player.bullets.remove(b)
+
         for collectable in collectables:
             collectable.draw(screen)
         t = get_font(20).render(f"FPS: {round(Clock.get_fps(), 2)}", True, (180, 180, 180))
         screen.blit(t, (10, 50))
+        t2 = get_font(20).render(f"Wave count: {wave_count}", True, (180, 180, 180))
+        screen.blit(t2, (10, 50+(t.get_height() + 10)))
 
         collisions = player.rect.collidelistall([pygame.Rect(c.pos.x, c.pos.y, 20, 20) for c in collectables])
         player.score += len(collisions)

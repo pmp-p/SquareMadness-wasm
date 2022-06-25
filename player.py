@@ -11,9 +11,27 @@ class Enemy:
         self.rect = pygame.Rect(x, y, w, h)
         self.dir = Vector2()
         self.color = color
+        self.max_range = 150
 
-    def draw(self, win):
+        self.tmp_bullet = {
+            'pos': Vector2(0, 0),
+            "vel": Vector2(0, 0)
+
+        }
+        self.bullets = []
+        self.bullet_speed = 5
+
+        self.shoot_timer_max = 50
+        self.shoot_timer = self.shoot_timer_max
+
+    def draw(self, win, w, h):
         pygame.draw.rect(win, self.color, self.rect)
+        for b in self.bullets:
+            pygame.draw.circle(win, (255, 255, 255), b["pos"], 2)
+            b["pos"] += b["vel"] * self.bullet_speed
+            if not 0 < b["pos"].x < w or not 0 < b["pos"].y < h:
+                if b in self.bullets:
+                    self.bullets.remove(b)
 
     def update_pos(self, dir):
         self.rect.x += dir[0]
@@ -26,11 +44,25 @@ class Enemy:
         angle = math.atan2(player.rect.y - self.rect.y, player.rect.x - self.rect.x)
         return math.cos(angle), math.sin(angle)
 
+    def dist_to_player(self, player):
+        return math.sqrt(
+            abs(player.rect.centerx - self.rect.centerx) ** 2 + abs(player.rect.centery - self.rect.centery) ** 2)
+
     def move(self, player):
         dx, dy = self.get_direction_to_player(player)
+        if self.dist_to_player(player) > self.max_range:
+            self.rect.x += dx * self.SPEED
+            self.rect.y += dy * self.SPEED
+        else:
+            self.shoot_timer -= 1
+            if self.shoot_timer <= 0:
+                self.shoot_timer = self.shoot_timer_max
+                tmp = self.tmp_bullet.copy()
+                tmp["pos"] = Vector2(*self.rect.center)
+                tmp["vel"].x = dx
+                tmp["vel"].y = dy
+                self.bullets.append(tmp.copy())
 
-        self.rect.x += dx * self.SPEED
-        self.rect.y += dy * self.SPEED
         # print(dx, dy, self.rect.center)
 
 
@@ -92,7 +124,7 @@ class Player:
         blit_center(screen, rotated_img, self.rect.center)
 
         for item in items:
-            item.draw(screen)
+            item.draw(screen,w,h)
 
         for bullet in self.bullets:
             if not 0 < bullet["pos"].x < w or not 0 < bullet["pos"].y < h:
