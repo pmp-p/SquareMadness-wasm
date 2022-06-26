@@ -60,7 +60,7 @@ collectables = [Collectable() for _ in range(150)]
 wave_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(wave_timer, 5000)
 
-wave_enemy_count = 30
+wave_enemy_count = 10
 wave_count = 0
 
 
