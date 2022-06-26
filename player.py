@@ -5,7 +5,7 @@ from pygame.math import Vector2
 
 
 class Enemy:
-    SPEED = 2
+    SPEED = 3
 
     def __init__(self, x, y, w, h, color):
         self.rect = pygame.Rect(x, y, w, h)
@@ -146,7 +146,7 @@ class Player:
             if not 0 < bullet["pos"].x < w or not 0 < bullet["pos"].y < h:
                 if bullet in self.bullets:
                     self.bullets.remove(bullet)
-            pygame.draw.circle(screen, (255, 255, 255), bullet["pos"], 2)
+            pygame.draw.circle(screen, (255, 255, 255), bullet["pos"], bullet["damage"])
             bullet["pos"] += bullet["vel"] * stats[self.state]["bullet_speed"]
 
     def move(self, items, w, h):

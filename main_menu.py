@@ -43,7 +43,7 @@ class Collectable:
 
 pg.init()
 screen = pg.display.set_mode((1280, 720), pg.RESIZABLE)
-pg.display.set_caption("Menu ")
+pg.display.set_caption("Menu")
 bg_music = pg.mixer.Sound('assets/music/geoswap-v3.wav')
 bg_music.play(loops=-1)
 bg_music.set_volume(0.3)
@@ -147,6 +147,21 @@ def upgrade_screen():
 
     wave_count += 1
     spawn_enemy(screen_w, screen_h)
+
+
+def game_over_screen():
+    screen_w, screen_h = pygame.display.get_window_size()
+
+    while True:
+        screen.fill("black")
+        t2 = get_font(20).render(f"Game Over", True, (180, 180, 180))
+        screen.blit(t2, (screen_w//2, screen_h))
+
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                exit()
+        pg.display.update()
 
 
 def spawn_enemy(screen_w, screen_h):
