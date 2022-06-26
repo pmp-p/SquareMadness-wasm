@@ -5,13 +5,13 @@ from pygame.math import Vector2
 
 
 class Enemy:
-    SPEED = 3
+    SPEED = 9
 
     def __init__(self, x, y, w, h, color):
         self.rect = pygame.Rect(x, y, w, h)
         self.dir = Vector2()
         self.color = color
-        self.max_range = 150
+        self.max_range = 250
 
         self.tmp_bullet = {
             'pos': Vector2(0, 0),
@@ -19,17 +19,17 @@ class Enemy:
 
         }
         self.bullets = []
-        self.bullet_speed = 5
+        self.bullet_speed = 7
 
-        self.shoot_timer_max = 50
+        self.shoot_timer_max = 40
         self.shoot_timer = self.shoot_timer_max
 
-        self.health = 2
+        self.health = 5
 
     def draw(self, win, w, h):
         pygame.draw.rect(win, self.color, self.rect)
         for b in self.bullets:
-            pygame.draw.circle(win, (255, 255, 255), b["pos"], 2)
+            pygame.draw.circle(win, 'yellow', b["pos"], 2)
             b["pos"] += b["vel"] * self.bullet_speed
             if not 0 < b["pos"].x < w or not 0 < b["pos"].y < h:
                 if b in self.bullets:
@@ -87,9 +87,9 @@ def blit_center(screen, surface: pygame.Surface, position):
 
 shoot_rate = "rate of fire"
 sides = [
-    {"damage": 1, shoot_rate: 60 * 1, "c": 0},
-    {"damage": 1, shoot_rate: 60 * 1, "c": 0},
-    {"damage": 1, shoot_rate: 60 * 1, "c": 0},
+    {"damage": 1, shoot_rate: 600 * 1, "c": 0},# right
+    {"damage": 1, shoot_rate: 600 * 1, "c": 0}, # down
+    {"damage": 1, shoot_rate: 600 * 1, "c": 0}, # left
     {"damage": 1, shoot_rate: 60 * 1, "c": 0}
 ]
 
@@ -97,11 +97,12 @@ sides = [
 class Player:
     def __init__(self, speed, health, x, y):
         self.speed = speed
+        speed = 3
         self.health = health
-        self.score = 4
+        self.score = 0
         self.side = 4
         self.rect = pygame.rect.Rect(x, y, 50, 50)
-        self.health = 100
+        self.health = 10
 
         self.state = "triangle"
         self.tmp_bullet = {
