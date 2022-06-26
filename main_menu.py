@@ -7,6 +7,28 @@ from button import Button
 from player import *
 
 
+# ! NOTES:
+# ! add this sounds where a player powers up:
+# power_up_sound = pg.mixer.Sound('assets/Sounds/powerupes.wav')
+# power_up_sound.set_volume(0.05)
+# power_up_sound.play()
+# ! add this sounds where a player dies:
+# death_sound = pg.mixer.Sound('assets/Sounds/death.wav')
+# death_sound.set_volume(0.05)
+# death_sound.play()
+# ! add this sounds where a player wins:
+# victory_sound = pg.mixer.Sound('assets/Sounds/8-bit-retro-success-victory.mp3')
+# victory_sound.set_volume(0.05)
+# victory_sound.play()
+
+# turrets
+
+
+class turrets:
+    def __init__(self):
+        super(turrets, self).__init__()
+
+
 class Collectable:
     def __init__(self):
         self.pos = Vector2(random.randint(-1280 * 2, 1280 * 2), random.randint(-720 * 2, 720 * 2))
@@ -22,6 +44,12 @@ class Collectable:
 pg.init()
 screen = pg.display.set_mode((1280, 720), pg.RESIZABLE)
 pg.display.set_caption("Menu ")
+bg_music = pg.mixer.Sound('assets/music/geoswap-v3.wav')
+bg_music.play(loops=-1)
+bg_music.set_volume(0.3)
+click_sound = pg.mixer.Sound('assets/Sounds/blipSelect.wav')
+click_sound.set_volume(0.05)
+
 Clock = pg.time.Clock()
 background = pg.image.load("assets/Backgrounds/Background.png")
 
@@ -46,6 +74,7 @@ def adding_sprites():  # for loading the sprites
 
 
 def play():  # what happens after play button gets clicked
+
     while True:
 
         screen_w, screen_h = pygame.display.get_window_size()
@@ -58,6 +87,9 @@ def play():  # what happens after play button gets clicked
                 print(event.button)
                 if event.button == 1:
                     player.shoot()
+                    hit_sound = pg.mixer.Sound('assets/Sounds/hitHurt.wav')
+                    hit_sound.set_volume(0.05)
+                    hit_sound.play()
                 else:
                     items.append(Enemy(*pygame.mouse.get_pos(), 30, 30, (255, 0, 255)))
 
@@ -80,7 +112,12 @@ def play():  # what happens after play button gets clicked
 
         collisions = player.rect.collidelistall([pygame.Rect(c.pos.x, c.pos.y, 20, 20) for c in collectables])
         player.score += len(collisions)
+
         for collision in collisions:
+            collect_sound = pg.mixer.Sound('assets/Sounds/pickupCoin.wav')
+            collect_sound.set_volume(0.05)
+            collect_sound.play()
+
             collectables.pop(collision)
         # collectables = collectables_copy.copy()
 
@@ -105,10 +142,12 @@ def options_video():  # what happens after options -> video button gets clicked
         screen.blit(options_video_text, options_video_rect)
         for event in pg.event.get():
             if event.type == pg.QUIT:
+                click_sound.play()
                 pg.quit()
                 exit()
             if event.type == pg.MOUSEBUTTONDOWN:  # what happens if a certain button gets clicked
                 if options_video_back.checkForInput(options_video_mouse_pos):
+                    click_sound.play()
                     options()
         pg.display.update()
 
@@ -131,15 +170,18 @@ def options_audio():  # what happens after options -> audio button gets clicked
         screen.blit(options_text, options_rect)
         for event in pg.event.get():
             if event.type == pg.QUIT:
+                click_sound.play()
                 pg.quit()
                 exit()
             if event.type == pg.MOUSEBUTTONDOWN:  # what happens if a certain button gets clicked
                 if options_audio_back.checkForInput(options_audio_mouse_pos):
+                    click_sound.play()
                     options()
         pg.display.update()
 
 
 def options():  # what happens after options button gets clicked
+
     while True:
         options_mouse_pos = pg.mouse.get_pos()
         screen.fill("black")
@@ -167,15 +209,19 @@ def options():  # what happens after options button gets clicked
             button.update(screen)
         for event in pg.event.get():
             if event.type == pg.QUIT:
+                click_sound.play()
                 pg.quit()
                 exit()
             if event.type == pg.MOUSEBUTTONDOWN:  # what happens if a certain button gets clicked
 
                 if options_audio_btn.checkForInput(options_mouse_pos):
+                    click_sound.play()
                     options_audio()
                 if options_video_btn.checkForInput(options_mouse_pos):
+                    click_sound.play()
                     options_video()
                 if options_back.checkForInput(options_mouse_pos):
+                    click_sound.play()
                     main_menu()
 
         pg.display.update()
@@ -211,15 +257,19 @@ def main_menu():  # Main screen upon opening the game, showing the main menu
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
+                click_sound.play()
                 pg.quit()
                 exit()
 
             if event.type == pg.MOUSEBUTTONDOWN:  # what happens if a certain button gets clicked
                 if play_button.checkForInput(menu_mouse_pos):
+                    click_sound.play()
                     play()
                 if options_button.checkForInput(menu_mouse_pos):
+                    click_sound.play()
                     options()
                 if quit_button.checkForInput(menu_mouse_pos):
+                    click_sound.play()
                     pg.quit()
                     exit()
 
