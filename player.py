@@ -85,12 +85,12 @@ def blit_center(screen, surface: pygame.Surface, position):
     screen.blit(surface, (position[0] - w // 2, position[1] - h // 2))
 
 
-shoot_rate = "shoot_rate"
+shoot_rate = "rate of fire"
 sides = [
-    {"damage": 1, "shoot_rate": 60 * 1, "c": 0},
-    {"damage": 1, "shoot_rate": 60 * 1, "c": 0},
-    {"damage": 1, "shoot_rate": 60 * 1, "c": 0},
-    {"damage": 1, "shoot_rate": 60 * 1, "c": 0}
+    {"damage": 1, shoot_rate: 60 * 1, "c": 0},
+    {"damage": 1, shoot_rate: 60 * 1, "c": 0},
+    {"damage": 1, shoot_rate: 60 * 1, "c": 0},
+    {"damage": 1, shoot_rate: 60 * 1, "c": 0}
 ]
 
 
@@ -186,7 +186,7 @@ class Player:
         ang_ = math.degrees(ang_)
 
         for i in range(self.side + 1):
-            ang = i * placing + ang_
+            ang = i * placing - 90 + ang_
             ang = math.radians(ang)
             rad = self.rect.w
             x = math.cos(ang) * rad

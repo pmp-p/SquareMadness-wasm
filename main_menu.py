@@ -84,11 +84,11 @@ def upgrade_screen():
     screen_w, screen_h = pygame.display.get_window_size()
     size = 150
     exit_ = False
-    upgrades = ["damage", "rate of fire"]
+    upgrades = ["damage", shoot_rate]
     selected_upgrade = 0
 
     def upgrade(index, upgrade_select):
-        if upgrade_select == "rate of fire":
+        if upgrade_select == shoot_rate:
             sides[index][upgrade_select] -= 10
         else:
             sides[index][upgrade_select] += 1
@@ -156,7 +156,7 @@ def game_over_screen():
     while True:
         screen.fill("black")
         t2 = get_font(20).render(f"Game Over", True, (180, 180, 180))
-        screen.blit(t2, (screen_w//2, screen_h))
+        blit_center(screen, t2, (screen_w // 2, screen_h))
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -223,6 +223,14 @@ def play():  # what happens after play button gets clicked
 
         for item in items:
             item.update(player)
+            for b in item.bullets:
+                if player.rect.collidepoint(b["pos"].x, b["pos"].y):
+                    player.health -= 1
+                    if player.health <= 0:
+                        game_over_screen()
+                    if b in item.bullets:
+                        item.bullets.remove(b)
+
             for b in player.bullets:
                 if item.rect.collidepoint(b["pos"].x, b["pos"].y):
                     item.health -= b["damage"]
