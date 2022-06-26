@@ -24,6 +24,8 @@ class Enemy:
         self.shoot_timer_max = 50
         self.shoot_timer = self.shoot_timer_max
 
+        self.health = 2
+
     def draw(self, win, w, h):
         pygame.draw.rect(win, self.color, self.rect)
         for b in self.bullets:
@@ -78,22 +80,33 @@ stats = {
 }
 
 
-def blit_center(screen, surface: pygame.Surface, position: Vector2):
+def blit_center(screen, surface: pygame.Surface, position):
     w, h = surface.get_width(), surface.get_height()
     screen.blit(surface, (position[0] - w // 2, position[1] - h // 2))
+
+
+shoot_rate = "shoot_rate"
+sides = [
+    {"damage": 1, "shoot_rate": 60 * 1, "c": 0},
+    {"damage": 1, "shoot_rate": 60 * 1, "c": 0},
+    {"damage": 1, "shoot_rate": 60 * 1, "c": 0},
+    {"damage": 1, "shoot_rate": 60 * 1, "c": 0}
+]
 
 
 class Player:
     def __init__(self, speed, health, x, y):
         self.speed = speed
         self.health = health
-        self.score = 1
+        self.score = 4
+        self.side = 4
         self.rect = pygame.rect.Rect(x, y, 50, 50)
 
         self.state = "triangle"
         self.tmp_bullet = {
             'pos': Vector2(0, 0),
-            "vel": Vector2(0, 0)
+            "vel": Vector2(0, 0),
+            "damage": 0
 
         }
         self.bullets = []
@@ -101,10 +114,12 @@ class Player:
         self.img = pygame.transform.scale(self.img, self.rect.size)
 
     def draw(self, screen, items, w, h):
-        placing = 360 / self.score
+        placing = 360 / self.side
         prev = None
-        for i in range(self.score + 1):
-            ang = i * placing
+        ang_ = math.atan2(self.rect.y - pygame.mouse.get_pos()[1], self.rect.x - pygame.mouse.get_pos()[0])
+        ang_ = math.degrees(ang_)
+        for i in range(self.side + 1):
+            ang = i * placing + 45 + ang_
             ang = math.radians(ang)
             rad = self.rect.w
             x = math.cos(ang) * rad
@@ -124,7 +139,7 @@ class Player:
         blit_center(screen, rotated_img, self.rect.center)
 
         for item in items:
-            item.draw(screen,w,h)
+            item.draw(screen, w, h)
 
         for bullet in self.bullets:
             if not 0 < bullet["pos"].x < w or not 0 < bullet["pos"].y < h:
@@ -165,22 +180,33 @@ class Player:
                     item.update_pos((-self.speed, 0))
 
     def shoot(self):
-        placing = 360 / self.score
+        placing = 360 / self.side
+        ang_ = math.atan2(self.rect.y - pygame.mouse.get_pos()[1], self.rect.x - pygame.mouse.get_pos()[0])
+        ang_ = math.degrees(ang_)
 
-        for i in range(self.score + 1):
-            ang = i * placing
+        for i in range(self.side + 1):
+            ang = i * placing + ang_
             ang = math.radians(ang)
             rad = self.rect.w
             x = math.cos(ang) * rad
             y = math.sin(ang) * rad
 
-            tmp = self.tmp_bullet.copy()
-            tmp["pos"] = Vector2(self.rect.centerx + x, self.rect.centery + y)
+            if i >= self.side:
+                break
+            sides[i]["c"] += 1
+            if sides[i]["c"] >= sides[i][shoot_rate]:
+                tmp = self.tmp_bullet.copy()
+                tmp["pos"] = Vector2(self.rect.centerx + x, self.rect.centery + y)
+                tmp["damage"] = sides[i]["damage"]
 
-            angle = math.atan2(y, x)
+                angle = math.atan2(y, x)
 
-            tmp["vel"] = tmp["vel"].copy()
-            tmp["vel"].x = math.cos(angle)
-            tmp["vel"].y = math.sin(angle)
+                tmp["vel"] = tmp["vel"].copy()
+                tmp["vel"].x = math.cos(angle)
+                tmp["vel"].y = math.sin(angle)
 
-            self.bullets.append(tmp.copy())
+                self.bullets.append(tmp.copy())
+                sides[i]["c"] = 0
+
+    def update_side_date(self):
+        pass

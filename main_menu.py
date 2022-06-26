@@ -79,42 +79,126 @@ def adding_sprites():  # for loading the sprites
     screen.blit(triangle, triangle_rect)
 
 
-def play():  # what happens after play button gets clicked
+def upgrade_screen():
+    global wave_count
     screen_w, screen_h = pygame.display.get_window_size()
-    while True:
+    size = 150
+    exit_ = False
+    upgrades = ["damage", shoot_rate]
+    selected_upgrade = 0
+
+    def upgrade(index, upgrade_select):
+        if selected_one == shoot_rate:
+            sides[index][selected_one] -= 10
+        else:
+            sides[index][selected_one] += 1
+
+    while not exit_:
+        screen.fill("black")
+        t2 = get_font(20).render(f"Upgrade screen", True, (180, 180, 180))
+        screen.blit(t2, (10, 10))
+
+        t = get_font(20).render(f"Upgrade {upgrades[selected_upgrade]}", True, (180, 180, 180))
+        screen.blit(t, (10, t2.get_height() + 10))
+
+        pygame.draw.rect(screen, (255, 255, 255), ((screen_w // 2) - size, (screen_h // 2) - size, size * 2, size * 2),
+                         5)
+        t2 = get_font(20).render(f"(1)", True, (180, 180, 180))
+        blit_center(screen, t2, (screen_w // 2 - (size + t2.get_width() + 10), screen_h // 2))
+
+        t2 = get_font(20).render(f"(2)", True, (180, 180, 180))
+        blit_center(screen, t2, (screen_w // 2, screen_h // 2 - (size + t2.get_height() + 10)))
+
+        t2 = get_font(20).render(f"(3)", True, (180, 180, 180))
+        blit_center(screen, t2, (screen_w // 2 + (size + t2.get_width() + 10), screen_h // 2))
+
+        t2 = get_font(20).render(f"(4)", True, (180, 180, 180))
+        blit_center(screen, t2, (screen_w // 2, screen_h // 2 + (size + t2.get_height() + 10)))
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
                 exit()
-            if event.type == wave_timer:
-                for enemy_i in range(wave_enemy_count):
-                    i = random.random()
-                    if i < .25:
-                        x = random.randint(-screen_w, 0)
-                        y = random.randint(0, screen_h)
-                    elif i < .50:
-                        x = random.randint(screen_w, screen_w * 2)
-                        y = random.randint(0, screen_h)
-                    elif i < .75:
-                        x = random.randint(0, screen_w)
-                        y = random.randint(-screen_h, 0)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP: selected_upgrade -= 1
+                if event.key == pygame.K_DOWN: selected_upgrade += 1
+                if selected_upgrade > len(upgrades) - 1: selected_upgrade = 0
+                if selected_upgrade < 0: selected_upgrade = len(upgrades) - 1
 
-                    elif i < 1:
-                        x = random.randint(0, screen_w)
-                        y = random.randint(screen_h, screen_h * 2)
+                selected_one = upgrades[selected_upgrade]
 
-                    items.append(Enemy(x, y, 30, 30, (255, 0, 0)))
+                if event.key == pygame.K_1:
+                    upgrade(0, selected_one)
+                    exit_ = True
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                print(event.button)
-                if event.button == 1:
-                    player.shoot()
-                    hit_sound = pg.mixer.Sound('assets/Sounds/hitHurt.wav')
-                    hit_sound.set_volume(0.05)
-                    hit_sound.play()
-                else:
-                    items.append(Enemy(*pygame.mouse.get_pos(), 30, 30, (255, 0, 255)))
+                if event.key == pygame.K_2:
+                    upgrade(1, selected_one)
+                    exit_ = True
+
+                if event.key == pygame.K_3:
+                    upgrade(2, selected_one)
+                    exit_ = True
+
+                if event.key == pygame.K_4:
+                    upgrade(3, selected_one)
+                    exit_ = True
+                player.update_side_date()
+        pg.display.update()
+
+    wave_count += 1
+    spawn_enemy(screen_w, screen_h)
+
+
+def spawn_enemy(screen_w, screen_h):
+    for enemy_i in range(wave_enemy_count):
+        i = random.random()
+        if i < .25:
+            x = random.randint(-screen_w, 0)
+            y = random.randint(0, screen_h)
+        elif i < .50:
+            x = random.randint(screen_w, screen_w * 2)
+            y = random.randint(0, screen_h)
+        elif i < .75:
+            x = random.randint(0, screen_w)
+            y = random.randint(-screen_h, 0)
+
+        else:
+            x = random.randint(0, screen_w)
+            y = random.randint(screen_h, screen_h * 2)
+
+        items.append(Enemy(x, y, 30, 30, (255, 0, 0)))
+
+
+shoot_event = pygame.USEREVENT + 2
+pygame.time.set_timer(shoot_event, 500)
+
+
+def play():  # what happens after play button gets clicked
+    global wave_count
+    screen_w, screen_h = pygame.display.get_window_size()
+    while True:
+        player.shoot()
+
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                exit()
+            if len(items) == 0:
+                if wave_count % 3 == 0:
+                    upgrade_screen()
+                elif event.type == wave_timer:
+                    wave_count += 1
+                    spawn_enemy(screen_w, screen_h)
+
+            # if event.type == shoot_event:
+            #     # print(event.button)
+            #     # if event.button == 1:
+            #     # player.shoot()
+            #     hit_sound = pg.mixer.Sound('assets/Sounds/hitHurt.wav')
+            #     hit_sound.set_volume(0.05)
+            #     hit_sound.play()
+            #     # else:
+            #     #     items.append(Enemy(*pygame.mouse.get_pos(), 30, 30, (255, 0, 255)))
 
         player.move(items + collectables, screen_w, screen_h)
         screen.fill("black")
@@ -125,7 +209,9 @@ def play():  # what happens after play button gets clicked
             item.update(player)
             for b in player.bullets:
                 if item.rect.collidepoint(b["pos"].x, b["pos"].y):
-                    if item in items:
+                    item.health -= b["damage"]
+
+                    if item.health <= 0 and item in items:
                         items.remove(item)
 
                     if b in player.bullets:
@@ -136,7 +222,7 @@ def play():  # what happens after play button gets clicked
         t = get_font(20).render(f"FPS: {round(Clock.get_fps(), 2)}", True, (180, 180, 180))
         screen.blit(t, (10, 50))
         t2 = get_font(20).render(f"Wave count: {wave_count}", True, (180, 180, 180))
-        screen.blit(t2, (10, 50+(t.get_height() + 10)))
+        screen.blit(t2, (10, 50 + (t.get_height() + 10)))
 
         collisions = player.rect.collidelistall([pygame.Rect(c.pos.x, c.pos.y, 20, 20) for c in collectables])
         player.score += len(collisions)
