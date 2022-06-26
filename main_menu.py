@@ -43,7 +43,7 @@ class Collectable:
 
 pg.init()
 screen = pg.display.set_mode((1280, 720), pg.RESIZABLE)
-pg.display.set_caption("Menu")
+pg.display.set_caption("Geoswap")
 bg_music = pg.mixer.Sound('assets/music/geoswap-v3.wav')
 bg_music.play(loops=-1)
 bg_music.set_volume(0.3)
@@ -84,19 +84,20 @@ def upgrade_screen():
     screen_w, screen_h = pygame.display.get_window_size()
     size = 150
     exit_ = False
-    upgrades = ["damage", shoot_rate]
+    upgrades = ["damage", "rate of fire"]
     selected_upgrade = 0
 
     def upgrade(index, upgrade_select):
-        if upgrade_select == shoot_rate:
+        if upgrade_select == "rate of fire":
             sides[index][upgrade_select] -= 10
         else:
             sides[index][upgrade_select] += 1
 
     while not exit_:
         screen.fill("black")
-        t2 = get_font(20).render(f"Upgrade screen", True, (180, 180, 180))
-        screen.blit(t2, (10, 10))
+        t2 = get_font(20).render(f"Press up/down on the arrow keys to switch between the upgrades", True,
+                                 (180, 180, 180))
+        screen.blit(t2, (10, 80))
 
         t = get_font(20).render(f"Upgrade {upgrades[selected_upgrade]}", True, (180, 180, 180))
         screen.blit(t, (10, t2.get_height() + 10))
