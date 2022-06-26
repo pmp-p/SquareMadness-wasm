@@ -88,10 +88,10 @@ def upgrade_screen():
     selected_upgrade = 0
 
     def upgrade(index, upgrade_select):
-        if selected_one == shoot_rate:
-            sides[index][selected_one] -= 10
+        if upgrade_select == shoot_rate:
+            sides[index][upgrade_select] -= 10
         else:
-            sides[index][selected_one] += 1
+            sides[index][upgrade_select] += 1
 
     while not exit_:
         screen.fill("black")

@@ -101,6 +101,7 @@ class Player:
         self.score = 4
         self.side = 4
         self.rect = pygame.rect.Rect(x, y, 50, 50)
+        self.health = 100
 
         self.state = "triangle"
         self.tmp_bullet = {
