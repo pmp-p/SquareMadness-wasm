@@ -1,1 +1,2 @@
-let's go
+music, sounds - done
+gameplay - not done
