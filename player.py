@@ -5,7 +5,7 @@ from pygame.math import Vector2
 
 
 class Enemy:
-    SPEED = 9
+    SPEED = 7
 
     def __init__(self, x, y, w, h, color):
         self.rect = pygame.Rect(x, y, w, h)
