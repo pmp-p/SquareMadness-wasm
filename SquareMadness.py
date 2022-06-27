@@ -63,7 +63,7 @@ class Collectable:
 
 
 pg.init()
-bg_music = pg.mixer.Sound("assets/music/geoswap-v3.wav")
+bg_music = pg.mixer.Sound("assets/music/geoswap-v3.ogg")
 bg_music.play(loops=-1)
 bg_music.set_volume(0.3)
 screen = pg.display.set_mode((width, height), pg.RESIZABLE)
