@@ -20,6 +20,7 @@ turrets = pg.sprite.Group()
 # victory_sound.play()
 
 # turrets
+
 fullscreen = False
 sound_off = False
 music_off = False
@@ -103,6 +104,9 @@ def upgrade_screen():
 
     def upgrade(index, upgrade_select):
         if upgrade_select == "rate of fire":
+
+            if sides[index][upgrade_select] == 600:
+                sides[index][upgrade_select] = 60
             sides[index][upgrade_select] -= 10
         else:
             sides[index][upgrade_select] += 1
@@ -152,7 +156,7 @@ def upgrade_screen():
 
                 selected_one = upgrades[selected_upgrade]
 
-                if event.key == pygame.K_1:
+                if event.key == pygame.K_3:
                     power_up_sound = pg.mixer.Sound('assets/Sounds/powerupes.wav')
                     power_up_sound.set_volume(0.05)
                     if not sound_off:
@@ -160,7 +164,7 @@ def upgrade_screen():
                     upgrade(0, selected_one)
                     exit_ = True
 
-                if event.key == pygame.K_2:
+                if event.key == pygame.K_4:
                     power_up_sound = pg.mixer.Sound('assets/Sounds/powerupes.wav')
                     power_up_sound.set_volume(0.05)
                     if not sound_off:
@@ -168,7 +172,7 @@ def upgrade_screen():
                     upgrade(1, selected_one)
                     exit_ = True
 
-                if event.key == pygame.K_3:
+                if event.key == pygame.K_1:
                     power_up_sound = pg.mixer.Sound('assets/Sounds/powerupes.wav')
                     power_up_sound.set_volume(0.05)
                     if not sound_off:
@@ -176,7 +180,7 @@ def upgrade_screen():
                     upgrade(2, selected_one)
                     exit_ = True
 
-                if event.key == pygame.K_4:
+                if event.key == pygame.K_2:
                     power_up_sound = pg.mixer.Sound('assets/Sounds/powerupes.wav')
                     power_up_sound.set_volume(0.05)
                     if not sound_off:
@@ -254,6 +258,7 @@ def play():  # what happens after play button gets clicked
     sound_vic_played = 0
     shield = 0
     counter = 1
+    counter_win = 0
     global wave_count
     hit_sound_en = pg.mixer.Sound('assets/Sounds/bum.wav')
     hit_sound_en.set_volume(0.1)
@@ -279,7 +284,7 @@ def play():  # what happens after play button gets clicked
                 if wave_count % 3 == 0:
 
                     upgrade_screen()
-                    shield = 60
+                    shield = 50
                 elif event.type == wave_timer:
                     wave_count += 1
                     spawn_enemy(screen_w, screen_h)
@@ -290,9 +295,13 @@ def play():  # what happens after play button gets clicked
                 sound_vic_played += 1
                 wave_count += 20
                 Enemy.SPEED += 10
+            if wave_count > 10:
+                wave_count += 20 * counter_win
+                Enemy.SPEED += 10 * counter_win
+                counter_win += 1
             if player.score % 10 == 0 and (counter + 9 * counter) == player.score:
                 upgrade_screen()
-                shield = 60
+                shield = 50
                 counter += 1
 
             # if event.type == shoot_event:
@@ -319,8 +328,6 @@ def play():  # what happens after play button gets clicked
                         hit_sound.play()
                     if item.health <= 0 and item in items:
                         items.remove(item)
-                    if b in player.bullets:
-                        player.bullets.remove(b)
 
             for b in item.bullets:
                 if player.rect.collidepoint(b["pos"].x, b["pos"].y) and shield == 0:
@@ -399,7 +406,7 @@ def options_video():  # what happens after options -> video button gets clicked
         screen.blit(screen_, (0, 0))
         options_video_mouse_pos = pg.mouse.get_pos()
         options_video_text = get_font(45).render("This is the VIDEO screen.", True, "gray")
-        options_video_rect = options_video_text.get_rect(center=(sw / 2, sh / 2 - 120))
+        options_video_rect = options_video_text.get_rect(center=(sw / 2, sh / 2 -120))
 
         options_video_back = Button(image=None, pos=(sw / 2, sh / 2 + 120),
                                     text_input="BACK", font=get_font(75), base_color="gray", hovering_color="Green")
@@ -430,7 +437,7 @@ def options_video():  # what happens after options -> video button gets clicked
                         if not sound_off:
                             click_sound.play()
                             screen_ = pygame.display.set_mode((screen.get_width(), screen.get_height()),
-                                                              pygame.RESIZABLE)
+                                                             pygame.RESIZABLE)
                     if not fullscreen:
                         if not sound_off:
                             click_sound.play()
