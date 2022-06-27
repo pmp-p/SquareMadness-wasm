@@ -42,7 +42,8 @@ class turret(pg.sprite.Sprite):
 
 class Collectable:
     def __init__(self):
-        self.pos = Vector2(random.randint(-1280 * 2, 1280 * 2), random.randint(-720 * 2, 720 * 2))
+        w,h = pygame.display.get_window_size()
+        self.pos = Vector2(random.randint(-w * 2, w * 2), random.randint(-h * 2, h * 2))
 
     def update_pos(self, dir):
         self.pos.x += dir[0]
@@ -212,7 +213,15 @@ def game_over_screen():
         blit_center(screen, t3, (screen_w // 2, (screen_h // 2 + 50)))
         blit_center(screen, t2, (screen_w // 2, (screen_h // 2) - 50))
         blit_center(screen, t2__1, (screen_w // 2, (screen_h // 2)))
-
+        if wave_count >= 3 and wave_count < 5:
+            ts = get_font(20).render(f"HELP #1: How about only upgrading one side?", True, 'pink')
+            blit_center(screen, ts, (screen_w // 2, (screen_h // 2 + 150)))
+        if wave_count >= 5 and wave_count < 7:
+            tss = get_font(20).render(f"HELP #2: How about only upgrading rate of fire?", True, 'pink')
+            blit_center(screen, tss, (screen_w // 2, (screen_h // 2 + 200)))
+        if wave_count >= 7:
+            tsss = get_font(20).render(f"HELP #3: Just upgrade 2nd side's rate of fire?", True, 'pink')
+            blit_center(screen, tsss, (screen_w // 2, (screen_h // 2 + 250)))
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
@@ -245,6 +254,7 @@ pygame.time.set_timer(shoot_event, 500)
 
 
 def play():  # what happens after play button gets clicked
+    sound_vic_played = 0
     shield = 0
     counter = 1
     global wave_count
@@ -273,11 +283,16 @@ def play():  # what happens after play button gets clicked
 
                     upgrade_screen()
                     shield = 50
-
                 elif event.type == wave_timer:
                     wave_count += 1
                     spawn_enemy(screen_w, screen_h)
-
+            if wave_count  == 10 and wave_count != 0 and sound_vic_played == 0:
+                victory_sound = pg.mixer.Sound('assets/Sounds/8-bit-retro-success-victory.mp3')
+                victory_sound.play()
+                victory_sound.set_volume(0.3)
+                sound_vic_played += 1
+                wave_count += 20
+                Enemy.SPEED += 10
             if player.score % 10 == 0 and (counter + 9 * counter) == player.score:
                 upgrade_screen()
                 shield = 50
@@ -348,14 +363,14 @@ def play():  # what happens after play button gets clicked
 
         screen.blit(t4, (10, 50 + (t.get_height() + 70)))
 
-        helping = get_font(20).render(f"Use WASD to move around", True, 'pink')
+        helping = get_font(14).render(f"Use WASD to move around", True, 'pink')
         screen.blit(helping, (screen_w // 4, 10))
-        helping2 = get_font(20).render(f"Collect 10 green circles to get an upgrade (that will also send a wave)", True,
+        helping2 = get_font(14).render(f"Collect 10 green circles to get an upgrade (this will send a wave)", True,
                                        'gray')
         screen.blit(helping2, (screen_w // 4, 30))
-        helping3 = get_font(20).render(f"Click ESC key to open options", True,
+        helping3 = get_font(14).render(f"Click ESC key to open options", True,
                                        'gray')
-        screen.blit(helping3, (screen_w // 4, 60))
+        screen.blit(helping3, (screen_w // 4, 50))
         collisions = player.rect.collidelistall([pygame.Rect(c.pos.x, c.pos.y, 20, 20) for c in collectables])
         player.score += len(collisions)
 
