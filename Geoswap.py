@@ -288,6 +288,8 @@ def play():  # what happens after play button gets clicked
                     hit_sound.play()
                     if item.health <= 0 and item in items:
                         items.remove(item)
+                    if b in player.bullets:
+                        player.bullets.remove(b)
             for b in item.bullets:
                 if player.rect.collidepoint(b["pos"].x, b["pos"].y) and shield == 0:
                     player.health -= 1
