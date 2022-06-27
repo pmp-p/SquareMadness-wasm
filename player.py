@@ -27,7 +27,7 @@ class Enemy:
         self.health = 5
 
     def draw(self, win, w, h):
-        pygame.draw.rect(win, self.color, self.rect)
+        pygame.draw.ellipse(win, self.color, self.rect,2)
         for b in self.bullets:
             pygame.draw.circle(win, 'yellow', b["pos"], 2)
             b["pos"] += b["vel"] * self.bullet_speed
