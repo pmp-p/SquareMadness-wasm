@@ -9,8 +9,12 @@ class Enemy:
 
     def __init__(self, x, y, w, h, color):
         self.rect = pygame.Rect(x, y, w, h)
-        self.dir = Vector2()
         self.color = color
+
+        self.reset()
+
+    def reset(self):
+        self.dir = Vector2()
         self.max_range = 250
 
         self.tmp_bullet = {
@@ -25,6 +29,7 @@ class Enemy:
         self.shoot_timer = self.shoot_timer_max
 
         self.health = 5
+
 
     def draw(self, win, w, h):
         pygame.draw.ellipse(win, self.color, self.rect,2)
@@ -95,7 +100,10 @@ sides = [
 
 
 class Player:
-    def __init__(self, speed, health, x, y):
+    def __init__(self):
+        pass
+
+    def reset(self, speed, health, x, y):
         self.speed = speed
         self.health = health
         self.score = 0
