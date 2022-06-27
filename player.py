@@ -63,7 +63,6 @@ class Enemy:
                 tmp["pos"] = Vector2(*self.rect.center)
                 tmp["vel"].x = dx
                 tmp["vel"].y = dy
-                tmp["vel"] = tmp["vel"].copy()
                 self.bullets.append(tmp.copy())
 
         # print(dx, dy, self.rect.center)
@@ -88,10 +87,10 @@ def blit_center(screen, surface: pygame.Surface, position):
 
 shoot_rate = "rate of fire"
 sides = [
-    {"damage": 1, shoot_rate: 60*1 * 1, "c": 0},# right
-    {"damage": 1, shoot_rate: 60*1 * 1, "c": 0}, # down
-    {"damage": 1, shoot_rate: 60*1 * 1, "c": 0}, # left
-    {"damage": 1, shoot_rate: 60*1 * 1, "c": 0}
+    {"damage": 1, shoot_rate: 600 * 1, "c": 0},# right
+    {"damage": 1, shoot_rate: 600 * 1, "c": 0}, # down
+    {"damage": 1, shoot_rate: 600 * 1, "c": 0}, # left
+    {"damage": 1, shoot_rate: 60 * 1, "c": 0}
 ]
 
 
