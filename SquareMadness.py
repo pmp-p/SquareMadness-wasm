@@ -500,7 +500,7 @@ async def play():  # what happens after play button gets clicked
         turrets.update()
         turrets.draw(screen)
         Clock.tick(60)
-        asyncio.sleep(0)
+        await asyncio.sleep(0)
 
 
 def options_video():  # what happens after options -> video button gets clicked
