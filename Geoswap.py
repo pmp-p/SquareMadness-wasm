@@ -43,7 +43,7 @@ class turret(pg.sprite.Sprite):
 
 class Collectable:
     def __init__(self):
-        w,h = pygame.display.get_window_size()
+        w, h = pygame.display.get_window_size()
         self.pos = Vector2(random.randint(-w * 2, w * 2), random.randint(-h * 2, h * 2))
 
     def update_pos(self, dir):
@@ -228,6 +228,38 @@ def game_over_screen():
                 pg.quit()
                 exit()
         pg.display.update()
+def game_win_screen():
+    screen_w, screen_h = pygame.display.get_window_size()
+    screen.fill("black")
+    death_sound = pg.mixer.Sound('assets/Sounds/8-bit-retro-success-victory.mp3')
+    death_sound.set_volume(0.05)
+    if not sound_off:
+        death_sound.play()
+    while True:
+        t2 = get_font(34).render(f"You Won", True, (255, 255, 255))
+        t2__1 = get_font(20).render(f'Please restart the game to play again', True, 'red')
+        t3 = get_font(20).render(f"Wave count: {wave_count + 1}", True, 'pink')
+        t5 = get_font(20).render(f"Time:{current_time}", True, 'pink')
+        t = get_font(20).render(f"Score:{player.score}", True, 'pink')
+        blit_center(screen, t, (screen_w // 2, (screen_h // 2 + 150)))
+        blit_center(screen, t5, (screen_w // 2, (screen_h // 2 + 100)))
+        blit_center(screen, t3, (screen_w // 2, (screen_h // 2 + 50)))
+        blit_center(screen, t2, (screen_w // 2, (screen_h // 2) - 50))
+        blit_center(screen, t2__1, (screen_w // 2, (screen_h // 2)))
+        if wave_count >= 3 and wave_count < 5:
+            ts = get_font(20).render(f"HELP #1: How about only upgrading one side?", True, 'pink')
+            blit_center(screen, ts, (screen_w // 2, (screen_h // 2 + 150)))
+        if wave_count >= 5 and wave_count < 7:
+            tss = get_font(20).render(f"HELP #2: How about only upgrading rate of fire?", True, 'pink')
+            blit_center(screen, tss, (screen_w // 2, (screen_h // 2 + 200)))
+        if wave_count >= 7:
+            tsss = get_font(20).render(f"HELP #3: Just upgrade 2nd side's rate of fire?", True, 'pink')
+            blit_center(screen, tsss, (screen_w // 2, (screen_h // 2 + 250)))
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                exit()
+        pg.display.update()
 
 
 def spawn_enemy(screen_w, screen_h):
@@ -288,7 +320,7 @@ def play():  # what happens after play button gets clicked
                 elif event.type == wave_timer:
                     wave_count += 1
                     spawn_enemy(screen_w, screen_h)
-            if wave_count  == 10 and wave_count != 0 and sound_vic_played == 0:
+            if wave_count == 10 and wave_count != 0 and sound_vic_played == 0:
                 victory_sound = pg.mixer.Sound('assets/Sounds/8-bit-retro-success-victory.mp3')
                 victory_sound.play()
                 victory_sound.set_volume(0.3)
@@ -316,7 +348,8 @@ def play():  # what happens after play button gets clicked
         screen.fill("black")
 
         player.draw(screen, items, screen_w, screen_h)
-
+        if wave_count%10 == 0 and not wave_count == 0:
+            game_win_screen()
         for item in items:
             item.update(player)
             for b in player.bullets:
@@ -406,7 +439,7 @@ def options_video():  # what happens after options -> video button gets clicked
         screen.blit(screen_, (0, 0))
         options_video_mouse_pos = pg.mouse.get_pos()
         options_video_text = get_font(45).render("This is the VIDEO screen.", True, "gray")
-        options_video_rect = options_video_text.get_rect(center=(sw / 2, sh / 2 -120))
+        options_video_rect = options_video_text.get_rect(center=(sw / 2, sh / 2 - 120))
 
         options_video_back = Button(image=None, pos=(sw / 2, sh / 2 + 120),
                                     text_input="BACK", font=get_font(75), base_color="gray", hovering_color="Green")
@@ -437,7 +470,7 @@ def options_video():  # what happens after options -> video button gets clicked
                         if not sound_off:
                             click_sound.play()
                             screen_ = pygame.display.set_mode((screen.get_width(), screen.get_height()),
-                                                             pygame.RESIZABLE)
+                                                              pygame.RESIZABLE)
                     if not fullscreen:
                         if not sound_off:
                             click_sound.play()
@@ -517,7 +550,6 @@ def options_audio():  # what happens after options -> audio button gets clicked
 
 
 def options():  # what happens after options button gets clicked
-
     while True:
         options_mouse_pos = pg.mouse.get_pos()
         sw, sh = pygame.display.get_window_size()
