@@ -814,7 +814,7 @@ async def main():
             print(state)
         pg.display.update()
         Clock.tick(60)
-        asyncio.sleep(0)
+        await asyncio.sleep(0)
 
     main_quit()
 
